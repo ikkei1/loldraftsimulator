@@ -41,6 +41,7 @@ let MAX_PROTECTS = 0; // Default to 0, set by modal
 let MAX_FEARLESS_BANS = 0; // Default to 0, set by modal
 
 let draggedChampId = null;
+let draggedFromSlot = null;
 
 // New: Explicit champion role mapping based on user's provided lists
 const championRoleMap = {
@@ -157,7 +158,7 @@ function initializeFearlessBanSlots(count) {
 function createPickDisplay(team) {
   const pickDisplay = document.createElement('div');
   pickDisplay.classList.add('pick-display');
-  pickDisplay.draggable = true;
+  pickDisplay.draggable = false; // Disable dragging on pickDisplay itself
   pickDisplay.dataset.team = team;
 
   const slot = createEmptySlot('pick', team);
@@ -179,16 +180,52 @@ function createEmptySlot(type, team = null) {
       slot.dataset.team = team;
   }
 
+  // Enable dragging from slots
+  slot.addEventListener('dragstart', (e) => {
+    const img = slot.querySelector('img');
+    if (img && e.target === img) {
+      draggedChampId = img.dataset.id;
+      draggedFromSlot = slot;
+      e.dataTransfer.effectAllowed = 'move';
+      slot.classList.add('dragging');
+      e.stopPropagation(); // Prevent parent from also initiating drag
+    }
+  });
+
+  slot.addEventListener('dragend', (e) => {
+    if (e.target.tagName === 'IMG') {
+      slot.classList.remove('dragging');
+      draggedChampId = null;
+      draggedFromSlot = null;
+    }
+  });
+
   slot.addEventListener('dragover', (e) => {
     e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
   });
 
   slot.addEventListener('drop', (e) => {
     e.preventDefault();
+    console.log('Drop event triggered', draggedChampId, draggedFromSlot);
     if (!draggedChampId) return;
 
     const champ = allChampions.find(c => c.id === draggedChampId);
     if (!champ) return;
+
+    // If dragging from another slot, first remove from original slot
+    if (draggedFromSlot) {
+      const fromType = draggedFromSlot.dataset.type;
+      if (fromType === 'pick') {
+        unpickChampion(draggedChampId);
+      } else if (fromType === 'ban') {
+        unbanChampion(draggedChampId);
+      } else if (fromType === 'protect') {
+        unprotectChampion(draggedChampId);
+      } else if (fromType === 'fearless-ban') {
+        unbanFearlessChampion(draggedChampId);
+      }
+    }
 
     let success = false;
     if (slot.dataset.type === 'pick') {
@@ -205,6 +242,7 @@ function createEmptySlot(type, team = null) {
       // No automatic switching
     }
     draggedChampId = null;
+    draggedFromSlot = null;
   });
 
   slot.addEventListener('click', (event) => {
@@ -269,14 +307,59 @@ function renderChampionPool(filter = '') {
       div.classList.add('champion');
       div.title = champ.name;
       div.dataset.id = champ.id;
+      
+      // Add status classes based on champion state
+      if (selectedChampions.has(champ.id)) {
+        // Check which team picked this champion
+        const bluePickElements = bluePicks.querySelectorAll('.slot img[data-id="' + champ.id + '"]');
+        const redPickElements = redPicks.querySelectorAll('.slot img[data-id="' + champ.id + '"]');
+        
+        if (bluePickElements.length > 0) {
+          div.classList.add('blue-picked');
+        } else if (redPickElements.length > 0) {
+          div.classList.add('red-picked');
+        }
+      }
+      
+      if (bannedChampions.has(champ.id)) {
+        div.classList.add('banned');
+      }
+      
+      if (protectedChampions.has(champ.id)) {
+        // Check which team protected this champion
+        const blueProtectElements = blueProtects.querySelectorAll('img[data-id="' + champ.id + '"]');
+        const redProtectElements = redProtects.querySelectorAll('img[data-id="' + champ.id + '"]');
+        
+        if (blueProtectElements.length > 0) {
+          div.classList.add('blue-protected');
+        } else if (redProtectElements.length > 0) {
+          div.classList.add('red-protected');
+        }
+      }
+      
+      if (fearlessBannedChampions.has(champ.id)) {
+        div.classList.add('fearless-banned');
+      }
       div.draggable = true;
 
       div.addEventListener('dragstart', (e) => {
+        // Prevent dragging already selected/banned champions (but allow protected champions)
+        if (selectedChampions.has(champ.id) || bannedChampions.has(champ.id) || 
+            fearlessBannedChampions.has(champ.id)) {
+          e.preventDefault();
+          return;
+        }
         draggedChampId = champ.id;
         e.dataTransfer.setData('text/plain', champ.id);
       });
 
       div.addEventListener('click', () => {
+        // Prevent clicking on already selected/banned champions (but allow protected champions)
+        if (selectedChampions.has(champ.id) || bannedChampions.has(champ.id) || 
+            fearlessBannedChampions.has(champ.id)) {
+          return;
+        }
+        
         let success = false;
         if (currentMode === 'ban') {
           let targetSlot = null;
@@ -366,6 +449,10 @@ function pickChampion(id, name, targetSlot = null) {
   champImg.width = 64;
   champImg.height = 64;
   champImg.dataset.id = id;
+  champImg.draggable = true;
+  // Reset any inline styles that might have been applied
+  champImg.style.filter = '';
+  champImg.style.opacity = '';
 
   slotToUse.appendChild(champImg);
 
@@ -423,6 +510,7 @@ function banChampion(id, name, targetSlot = null) {
   champImg.width = 50;
   champImg.height = 50;
   champImg.dataset.id = id;
+  champImg.draggable = true;
 
   slotToUse.appendChild(champImg);
 
@@ -477,6 +565,10 @@ function protectChampion(id, name, targetSlot = null) {
   champImg.width = 64;
   champImg.height = 64;
   champImg.dataset.id = id;
+  champImg.draggable = true;
+  // Reset any inline styles that might have been applied
+  champImg.style.filter = '';
+  champImg.style.opacity = '';
 
   slotToUse.appendChild(champImg);
   renderChampionPool(searchInput.value);
@@ -528,6 +620,7 @@ function banFearlessChampion(id, name, targetSlot = null) {
   champImg.width = 64;
   champImg.height = 64;
   champImg.dataset.id = id;
+  champImg.draggable = true;
 
   slotToUse.appendChild(champImg);
   renderChampionPool(searchInput.value);
@@ -645,14 +738,17 @@ function setupPickSlotsReordering() {
     
     for (let i = 0; i < pickDisplays.length; i++) {
       const pickDisplay = pickDisplays[i];
+      pickDisplay.draggable = true; // Enable dragging for reordering
       
       pickDisplay.addEventListener('dragstart', (e) => {
         const slot = pickDisplay.querySelector('.slot');
-        if (slot && slot.childElementCount > 0) {
+        const img = slot ? slot.querySelector('img') : null;
+        // Only handle reordering if dragging starts on the pickDisplay itself (not on the image)
+        if (e.target === pickDisplay && slot && slot.childElementCount > 0) {
           draggedPickDisplay = pickDisplay;
           e.dataTransfer.effectAllowed = 'move';
           pickDisplay.classList.add('dragging');
-        } else {
+        } else if (e.target !== img) {
           e.preventDefault();
         }
       });
