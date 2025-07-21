@@ -69,7 +69,7 @@ const championRoleMap = {
   'Adc': [
     "Ashe", "Aphelios", "Ezreal", "KaiSa", "Cassiopeia", "Kalista", "Caitlyn", "KogMaw", "Corki", "Samira",
     "Xayah", "Sivir", "Ziggs", "Jhin", "Jinx", "Smolder", "Senna", "Zeri", "Twitch", "Tristana", "Draven",
-    "Nilah", "MissFortune", "Milio", "Lucian", "Varus", "Vayne"
+    "Nilah", "MissFortune", "Milio", "Lucian", "Varus", "Vayne", "Yunara"
   ],
   'Support': [
     "Alistar", "Elise", "Karma", "Galio", "Gragas", "Sylas", "Zyra", "Zac", "Shen", "Shaco", "Janna",
