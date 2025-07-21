@@ -1,42 +1,94 @@
+/* League of Legends inspired styling */
+
+:root {
+  --lol-gold: #C89B3C;
+  --lol-gold-light: #F0E6D2;
+  --lol-blue: #0596AA;
+  --lol-blue-team: #0596AA;
+  --lol-red-team: #EE5A52;
+  --lol-dark-bg: #0A0E1A;
+  --lol-dark-secondary: #0C1726;
+  --lol-border: #3C4043;
+  --lol-text: #CDBE91;
+  --lol-text-light: #A09B8C;
+}
+
 body {
-  font-family: sans-serif;
+  font-family: 'Georgia', 'Times New Roman', serif;
   text-align: center;
-  background-color: #f0f2f5;
-  color: #333;
+  background: linear-gradient(135deg, #0A0E1A 0%, #0C1726 50%, #0A0E1A 100%);
+  background-attachment: fixed;
+  color: var(--lol-text);
   margin: 0;
   padding: 20px;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(5, 150, 170, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(238, 90, 82, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 h1 {
-  color: #2c3e50;
-  margin-bottom: 20px;
+  color: var(--lol-gold);
+  margin-bottom: 30px;
+  font-size: 2.5em;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(200, 155, 60, 0.5),
+               0 0 40px rgba(200, 155, 60, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .champion-search-container {
-  background-color: #ffffff;
+  background: linear-gradient(135deg, rgba(12, 23, 38, 0.95) 0%, rgba(10, 14, 26, 0.95) 100%);
+  border: 2px solid var(--lol-gold);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  padding: 15px;
+  box-shadow: 
+    0 0 20px rgba(200, 155, 60, 0.3),
+    inset 0 0 20px rgba(200, 155, 60, 0.1);
+  padding: 20px;
   margin: 20px auto;
   max-width: 500px;
+  position: relative;
+  z-index: 1;
 }
 
 input[type="text"] {
-  padding: 10px 15px;
+  padding: 12px 20px;
   font-size: 16px;
-  margin: 15px auto 15px auto; /* Adjusted margin */
+  margin: 15px auto 15px auto;
   width: 350px;
   max-width: 90%;
-  border: 1px solid #ccc;
+  border: 2px solid var(--lol-border);
   border-radius: 5px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-  transition: border-color 0.3s ease;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--lol-text);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
   display: block;
+  font-family: inherit;
 }
 
 input[type="text"]:focus {
-  border-color: #007bff;
+  border-color: var(--lol-gold);
   outline: none;
+  box-shadow: 
+    0 0 10px rgba(200, 155, 60, 0.5),
+    inset 0 2px 5px rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .role-filter-container {
@@ -48,26 +100,38 @@ input[type="text"]:focus {
 }
 
 .role-button {
-  padding: 8px 15px;
+  padding: 10px 18px;
   font-size: 14px;
-  background-color: #6c757d;
-  color: white;
-  border: none;
+  background: linear-gradient(135deg, #1e2328 0%, #0c1f2e 100%);
+  color: var(--lol-text-light);
+  border: 1px solid var(--lol-border);
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
 
 .role-button:hover {
-  background-color: #5a6268;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #2e3338 0%, #1c2f3e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  border-color: var(--lol-gold);
+  color: var(--lol-gold-light);
 }
 
 .role-button.active {
-  background-color: #007bff;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, var(--lol-gold) 0%, #A88A59 100%);
+  box-shadow: 
+    0 0 15px rgba(200, 155, 60, 0.6),
+    inset 0 2px 4px rgba(0,0,0,0.3);
+  border-color: var(--lol-gold);
+  color: #0A0E1A;
+  font-weight: 700;
 }
 
 .controls {
@@ -79,35 +143,65 @@ input[type="text"]:focus {
 }
 
 .controls button {
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
+  background: linear-gradient(135deg, #1e2328 0%, #0c1f2e 100%);
+  color: var(--lol-gold-light);
+  border: 2px solid var(--lol-border);
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
 }
 
 .controls button:hover {
-  background-color: #0056b3;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #2e3338 0%, #1c2f3e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.7);
+  border-color: var(--lol-gold);
+  color: var(--lol-gold);
+}
+
+.controls button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(200, 155, 60, 0.3) 0%, transparent 70%);
+  transition: width 0.6s, height 0.6s;
+  transform: translate(-50%, -50%);
+}
+
+.controls button:hover::before {
+  width: 100%;
+  height: 100%;
 }
 
 .controls button.active {
-  background-color: #28a745;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, var(--lol-gold) 0%, #A88A59 100%);
+  box-shadow: 
+    0 0 20px rgba(200, 155, 60, 0.6),
+    inset 0 2px 4px rgba(0,0,0,0.3);
+  border-color: var(--lol-gold);
+  color: #0A0E1A;
 }
 
 
 .collapsible-button {
-  background-color: #6c757d !important;
+  background: linear-gradient(135deg, #2a2d32 0%, #1a1d22 100%) !important;
+  border-color: var(--lol-text-light) !important;
 }
 
 .collapsible-button:hover {
-  background-color: #5a6268 !important;
+  background: linear-gradient(135deg, #3a3d42 0%, #2a2d32 100%) !important;
+  border-color: var(--lol-gold) !important;
 }
 
 
@@ -132,31 +226,35 @@ input[type="text"]:focus {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background: linear-gradient(135deg, #1e2328 0%, #0c1f2e 100%);
+  border: 2px solid var(--lol-border);
   -webkit-transition: .4s;
   transition: .4s;
   border-radius: 34px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 3px;
+  background: linear-gradient(135deg, var(--lol-gold) 0%, #A88A59 100%);
   -webkit-transition: .4s;
   transition: .4s;
   border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background: linear-gradient(135deg, #2e3338 0%, #1c2f3e 100%);
+  border-color: var(--lol-gold);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.5);
 }
 
 input:checked + .slider:before {
@@ -183,7 +281,20 @@ input:checked + .slider:before {
 
 .toggle-container span {
   font-weight: bold;
-  color: #555;
+  color: var(--lol-text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+
+.toggle-container span:first-child {
+  color: var(--lol-blue-team);
+  text-shadow: 0 0 10px rgba(5, 150, 170, 0.5);
+}
+
+.toggle-container span:last-child {
+  color: var(--lol-red-team);
+  text-shadow: 0 0 10px rgba(238, 90, 82, 0.5);
 }
 
 .slider-labels {
@@ -230,34 +341,71 @@ input:checked + .slider .right-label {
   align-items: flex-start;
   gap: 30px;
   max-width: 1400px;
+  position: relative;
+  z-index: 1;
 }
 
 .team {
   width: 320px;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, rgba(12, 23, 38, 0.95) 0%, rgba(10, 14, 26, 0.95) 100%);
+  border: 2px solid var(--lol-border);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  padding: 15px;
+  box-shadow: 
+    0 8px 16px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
   flex-grow: 1;
   max-width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.team::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--lol-gold), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .team h2 {
   margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 1.5em;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
 }
 
 #blue-team h2, #blue-protect h2, #blue-fearless-ban h2 {
-  color: #007bff;
+  color: var(--lol-blue-team);
+  text-shadow: 0 0 15px rgba(5, 150, 170, 0.5);
 }
 
 #red-team h2, #red-protect h2, #red-fearless-ban h2 {
-  color: #dc3545;
+  color: var(--lol-red-team);
+  text-shadow: 0 0 15px rgba(238, 90, 82, 0.5);
+}
+
+#blue-team {
+  border-color: var(--lol-blue-team);
+}
+
+#red-team {
+  border-color: var(--lol-red-team);
 }
 
 .bans {
@@ -273,8 +421,8 @@ input:checked + .slider .right-label {
 .bans .slot {
   width: 50px;
   height: 50px;
-  border: 2px dashed #e0a0a0;
-  background-color: #ffe0e0;
+  border: 2px dashed #8B3A3A;
+  background: linear-gradient(135deg, rgba(139, 58, 58, 0.2) 0%, rgba(139, 58, 58, 0.1) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,16 +430,28 @@ input:checked + .slider .right-label {
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.bans .slot:hover {
+  border-color: #A54545;
+  box-shadow: 0 0 10px rgba(165, 69, 69, 0.3);
 }
 
 .bans .slot img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(100%);
-  opacity: 0.7;
   position: relative;
   z-index: 1;
+  cursor: grab;
+}
+
+/* Apply grayscale only when in ban slots */
+.bans .slot img,
+.fearless-bans .slot img {
+  filter: grayscale(100%);
+  opacity: 0.7;
 }
 
 .picks {
@@ -305,9 +465,8 @@ input:checked + .slider .right-label {
 }
 
 .protects, .fearless-bans {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 64px);
   gap: 12px;
   margin: 10px 0;
   min-height: 80px;
@@ -319,8 +478,8 @@ input:checked + .slider .right-label {
 .picks .slot, .protects .slot, .fearless-bans .slot {
   width: 64px;
   height: 64px;
-  border: 2px dashed #a0a0a0;
-  background-color: #e9ecef;
+  border: 2px dashed var(--lol-border);
+  background: linear-gradient(135deg, rgba(60, 64, 67, 0.2) 0%, rgba(60, 64, 67, 0.1) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -328,11 +487,35 @@ input:checked + .slider .right-label {
   overflow: hidden;
   flex-shrink: 0;
   position: relative;
+  transition: all 0.3s ease;
 }
 
-.picks .slot img, .protects .slot img, .fearless-bans .slot img {
+.picks .slot:hover, .protects .slot:hover, .fearless-bans .slot:hover {
+  border-color: var(--lol-gold);
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.3);
+}
+
+.picks .slot img, .protects .slot img {
   position: relative;
   z-index: 1;
+  cursor: grab;
+  filter: none;
+  opacity: 1;
+}
+
+.fearless-bans .slot img {
+  position: relative;
+  z-index: 1;
+  cursor: grab;
+}
+
+.picks .slot img:active, .protects .slot img:active, .fearless-bans .slot img:active,
+.bans .slot img:active {
+  cursor: grabbing;
+}
+
+.slot.dragging {
+  opacity: 0.5;
 }
 
 .champion-pool {
@@ -350,34 +533,37 @@ input:checked + .slider .right-label {
   scrollbar-width: none;
 }
 
-.champion-pool::-webkit-scrollbar {
-  display: none;
-}
 
 .champion {
   width: 70px;
   text-align: center;
-  color: #555;
+  color: var(--lol-text-light);
   font-size: 12px;
   user-select: none;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
   padding: 5px;
   border-radius: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid transparent;
+  position: relative;
 }
 
 .champion:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  background-color: #f8f9fa;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.7);
+  background: rgba(200, 155, 60, 0.1);
+  border-color: var(--lol-gold);
 }
 
 .champion img {
   width: 64px;
   height: 64px;
-  border: 2px solid #b0b0b0;
+  border: 2px solid var(--lol-border);
   border-radius: 50%;
   object-fit: cover;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
 .champion.disabled img {
@@ -387,9 +573,112 @@ input:checked + .slider .right-label {
   border-color: #ccc;
 }
 
+/* Disabled state for already used champions */
+.champion.blue-picked,
+.champion.red-picked,
+.champion.banned,
+.champion.fearless-banned {
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+/* Protected champions can still be selected */
+.champion.blue-protected,
+.champion.red-protected {
+  opacity: 1;
+}
+
 .champion.selected img {
   border: 3px solid #007bff;
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+}
+
+/* Team pick status styles */
+.champion.blue-picked img {
+  border: 3px solid var(--lol-blue-team);
+  box-shadow: 
+    0 0 15px rgba(5, 150, 170, 0.8),
+    0 0 30px rgba(5, 150, 170, 0.4);
+  transform: scale(1.05);
+}
+
+.champion.red-picked img {
+  border: 3px solid var(--lol-red-team);
+  box-shadow: 
+    0 0 15px rgba(238, 90, 82, 0.8),
+    0 0 30px rgba(238, 90, 82, 0.4);
+  transform: scale(1.05);
+}
+
+/* Ban status styles */
+.champion.banned img {
+  border: 3px solid #8B3A3A;
+  filter: grayscale(100%);
+  opacity: 0.4;
+  position: relative;
+}
+
+.champion.banned::after {
+  content: '×';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: #C8393A;
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(0,0,0,0.8);
+}
+
+/* Protect status styles */
+.champion.blue-protected img {
+  border: 3px solid #4CAF50;
+  box-shadow: 
+    0 0 15px rgba(76, 175, 80, 0.8),
+    inset 0 0 20px rgba(76, 175, 80, 0.3);
+}
+
+.champion.blue-protected::before {
+  content: '🛡️';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 20px;
+  filter: hue-rotate(200deg);
+}
+
+.champion.red-protected img {
+  border: 3px solid #66BB6A;
+  box-shadow: 
+    0 0 15px rgba(102, 187, 106, 0.8),
+    inset 0 0 20px rgba(102, 187, 106, 0.3);
+}
+
+.champion.red-protected::before {
+  content: '🛡️';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 20px;
+  filter: hue-rotate(30deg);
+}
+
+/* Fearless ban status styles */
+.champion.fearless-banned img {
+  border: 3px solid #9C27B0;
+  filter: grayscale(80%) brightness(0.7);
+  opacity: 0.5;
+}
+
+.champion.fearless-banned::after {
+  content: '⚡';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  color: #AB47BC;
+  text-shadow: 0 0 10px rgba(171, 71, 188, 0.8);
 }
 
 .champion-name {
@@ -397,13 +686,16 @@ input:checked + .slider .right-label {
   font-size: 13px;
   line-height: 1.2;
   margin-top: 5px;
-  color: #333;
+  color: var(--lol-gold-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .champion-eng-name {
   font-size: 10px;
-  color: #888;
+  color: var(--lol-text-light);
   margin-top: 2px;
+  opacity: 0.8;
 }
 
 .pick-display {
@@ -439,59 +731,93 @@ input:checked + .slider .right-label {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
-  background-color: #e9ecef;
+  background: linear-gradient(135deg, rgba(20, 30, 45, 0.95) 0%, rgba(15, 20, 30, 0.95) 100%);
+  border: 1px solid var(--lol-border);
   border-radius: 8px;
   margin-top: 15px;
   padding: 0 15px;
+  position: relative;
+  z-index: 1;
 }
 
 .collapsible-content.show {
   max-height: 500px;
   padding: 15px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .protects .slot {
-  border: 2px dashed #8bc34a;
-  background-color: #e8f5e9;
+  border: 2px dashed #4CAF50;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0.1) 100%);
+}
+
+.protects .slot:hover {
+  border-color: #66BB6A;
+  box-shadow: 0 0 10px rgba(102, 187, 106, 0.5);
 }
 
 .fearless-bans .slot {
-  border: 2px dashed #9c27b0;
-  background-color: #f3e5f5;
+  border: 2px dashed #9C27B0;
+  background: linear-gradient(135deg, rgba(156, 39, 176, 0.2) 0%, rgba(156, 39, 176, 0.1) 100%);
+}
+
+.fearless-bans .slot:hover {
+  border-color: #AB47BC;
+  box-shadow: 0 0 10px rgba(171, 71, 188, 0.5);
 }
 
 .modal {
-  border: none;
+  border: 2px solid var(--lol-gold);
   border-radius: 8px;
   padding: 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    0 0 30px rgba(200, 155, 60, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.8);
   max-width: 400px;
   width: 90%;
+  background: linear-gradient(135deg, #0C1726 0%, #0A0E1A 100%);
 }
 
 .modal::backdrop {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .modal-content {
-  padding: 20px;
+  padding: 30px;
   text-align: center;
 }
 
 .modal-content h2 {
   margin-top: 0;
-  color: #333;
+  color: var(--lol-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(200, 155, 60, 0.5);
 }
 
 .modal-content input[type="number"] {
   width: 80px;
-  padding: 8px;
+  padding: 10px;
   margin: 20px auto;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 2px solid var(--lol-border);
   border-radius: 4px;
   text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--lol-text);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+}
+
+.modal-content input[type="number"]:focus {
+  outline: none;
+  border-color: var(--lol-gold);
+  box-shadow: 
+    0 0 10px rgba(200, 155, 60, 0.5),
+    inset 0 2px 5px rgba(0,0,0,0.5);
 }
 
 .modal-actions {
@@ -510,22 +836,36 @@ input:checked + .slider .right-label {
   transition: background-color 0.3s ease;
 }
 
+.modal-actions button {
+  border: 2px solid var(--lol-border);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
 .modal-actions button:first-child {
-  background-color: #007bff;
-  color: white;
+  background: linear-gradient(135deg, var(--lol-gold) 0%, #A88A59 100%);
+  color: #0A0E1A;
+  border-color: var(--lol-gold);
 }
 
 .modal-actions button:first-child:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #D4A94A 0%, #B89A69 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 15px rgba(200, 155, 60, 0.5),
+    0 6px 12px rgba(0,0,0,0.7);
 }
 
 .modal-actions button:last-child {
-  background-color: #6c757d;
-  color: white;
+  background: linear-gradient(135deg, #1e2328 0%, #0c1f2e 100%);
+  color: var(--lol-text-light);
 }
 
 .modal-actions button:last-child:hover {
-  background-color: #5a6268;
+  background: linear-gradient(135deg, #2e3338 0%, #1c2f3e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.7);
+  border-color: var(--lol-gold);
+  color: var(--lol-gold-light);
 }
 
 
@@ -562,6 +902,305 @@ input:checked + .slider .right-label {
   .role-filter-container {
     margin-top: 10px;
   }
+  .protects, .fearless-bans {
+    grid-template-columns: repeat(4, 64px);
+  }
+}
+
+/* Hextech-style decoration */
+.team::after,
+.champion-search-container::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(45deg, transparent 30%, var(--lol-gold) 50%, transparent 70%);
+  background-size: 20px 20px;
+  background-position: 0 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 8px;
+}
+
+.team:hover::after,
+.champion-search-container:hover::after {
+  opacity: 0.1;
+  animation: hextech-glow 3s linear infinite;
+}
+
+@keyframes hextech-glow {
+  0% { background-position: 0 0; }
+  100% { background-position: 20px 20px; }
+}
+
+/* Slot glow effect */
+.slot {
+  position: relative;
+}
+
+.slot::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--lol-gold), transparent, var(--lol-gold));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 4px;
+  z-index: -1;
+}
+
+.slot:hover::before {
+  opacity: 0.5;
+  animation: rotate-glow 2s linear infinite;
+}
+
+@keyframes rotate-glow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Loading text effect */
+.controls button,
+.role-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.controls button::after,
+.role-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(200, 155, 60, 0.3), transparent);
+  transform: rotate(45deg) translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.controls button:hover::after,
+.role-button:hover::after {
+  transform: rotate(45deg) translateX(100%);
+}
+
+/* Pick display improvements */
+.pick-display {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+  border: 1px solid rgba(200, 155, 60, 0.2);
+  margin: 5px 0;
+}
+
+.pick-display::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, var(--lol-gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pick-display:hover::before {
+  opacity: 1;
+}
+
+/* Champion hover effect */
+.champion {
+  transition: all 0.3s ease;
+}
+
+.champion:hover img {
+  animation: champion-pulse 1s ease-in-out infinite;
+}
+
+@keyframes champion-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Dragging animation */
+.slot.drag-over {
+  animation: slot-pulse 0.5s ease-in-out infinite;
+  border-color: var(--lol-gold) !important;
+}
+
+@keyframes slot-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(200, 155, 60, 0);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 5px rgba(200, 155, 60, 0.5);
+  }
+}
+
+/* Team header with slot controls */
+.team-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.team-header h2 {
+  margin: 0;
+}
+
+.slot-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slot-control-btn {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--lol-gold);
+  background: linear-gradient(135deg, #1e2328 0%, #0c1f2e 100%);
+  color: var(--lol-gold-light);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.slot-control-btn:hover {
+  background: linear-gradient(135deg, var(--lol-gold) 0%, #A88A59 100%);
+  color: #0A0E1A;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.6);
+}
+
+.slot-count {
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--lol-gold);
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--lol-border);
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.slot-count:hover {
+  border-color: var(--lol-gold);
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.3);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.slot-count-input {
+  width: 50px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--lol-gold);
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--lol-gold);
+  border-radius: 5px;
+  text-align: center;
+  padding: 0;
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.5);
+  font-family: inherit;
+}
+
+.slot-count-input:focus {
+  outline: none;
+  border-color: var(--lol-gold);
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.5);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Hide number input spin buttons */
+.slot-count-input::-webkit-inner-spin-button,
+.slot-count-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.slot-count-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Advanced info styling */
+.advanced-info {
+  text-align: center;
+  padding: 10px;
+}
+
+.advanced-info p {
+  margin: 0;
+  color: var(--lol-text-light);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Page load animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1, .controls, .team-container, .champion-search-container {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.team:nth-child(1) { animation-delay: 0.1s; }
+.team:nth-child(2) { animation-delay: 0.2s; }
+.team:nth-child(3) { animation-delay: 0.3s; }
+
+/* Scrollbar styling */
+.champion-pool {
+  scrollbar-width: thin;
+  scrollbar-color: var(--lol-gold) rgba(0, 0, 0, 0.3);
+}
+
+.champion-pool::-webkit-scrollbar {
+  width: 8px;
+  display: block;
+}
+
+.champion-pool::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.champion-pool::-webkit-scrollbar-thumb {
+  background: var(--lol-gold);
+  border-radius: 4px;
+}
+
+.champion-pool::-webkit-scrollbar-thumb:hover {
+  background: var(--lol-gold-light);
 }
 
 @media (max-width: 480px) {
@@ -595,5 +1234,13 @@ input:checked + .slider .right-label {
   .role-button {
     font-size: 12px;
     padding: 6px 10px;
+  }
+  .protects, .fearless-bans {
+    grid-template-columns: repeat(3, 56px);
+    gap: 8px;
+  }
+  .protects .slot, .fearless-bans .slot {
+    width: 56px;
+    height: 56px;
   }
 }
