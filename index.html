@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>LoL Pick Draft</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>LoL ピックドラフト</h1>
+
+  <div class="controls">
+    <div class="toggle-container">
+      <span class="toggle-label">Blue</span>
+      <label class="switch">
+        <input type="checkbox" id="teamToggleButton">
+        <span class="slider round">
+        </span>
+      </label>
+      <span class="toggle-label">Red</span>
+    </div>
+
+    <button onclick="setMode('pick')" id="pickModeBtn">ピックフェーズ</button>
+    <button onclick="setMode('ban')" id="banModeBtn">通常バンフェーズ</button>
+    <button onclick="resetDraft()">リセット</button>
+
+    <button class="collapsible-button" onclick="toggleAdvancedSettings()">詳細設定</button>
+  </div>
+  
+  <div class="collapsible-content" id="advancedSettingsContent">
+    <div class="controls">
+      <button onclick="openProtectModal()">プロテクト</button>
+      <button onclick="openFearlessBanModal()">フィアレスバン</button>
+    </div>
+  </div>
+
+  <div class="team-container protect-container" id="protectContainer" style="display: none;">
+    <div class="team" id="blue-protect">
+      <h2>Blue Team Protects</h2>
+      <div class="protects" id="blue-protects"></div>
+    </div>
+    <div class="team" id="red-protect">
+      <h2>Red Team Protects</h2>
+      <div class="protects" id="red-protects"></div>
+    </div>
+  </div>
+
+  <div class="team-container fearless-ban-container" id="fearlessBanContainer" style="display: none;">
+    <div class="team" id="blue-fearless-ban">
+      <h2>Blue Team Fearless Bans</h2>
+      <div class="fearless-bans" id="blue-fearless-bans"></div>
+    </div>
+    <div class="team" id="red-fearless-ban">
+      <h2>Red Team Fearless Bans</h2>
+      <div class="fearless-bans" id="red-fearless-bans"></div>
+    </div>
+  </div>
+
+  <div class="team-container">
+    <div class="team" id="blue-team">
+      <h2>Blue Team</h2>
+      <div class="bans" id="blue-bans"></div>
+      <div class="picks" id="blue-picks"></div>
+    </div>
+
+    <div class="champion-search-container">
+      <input type="text" id="search" placeholder="チャンピオン名で検索（日本語 / 英語）" />
+      <div class="role-filter-container">
+        <button class="role-button" data-role="All" onclick="filterByRole('All')">全て</button>
+        <button class="role-button" data-role="Top" onclick="filterByRole('Top')">TOP</button>
+        <button class="role-button" data-role="Jungle" onclick="filterByRole('Jungle')">JG</button>
+        <button class="role-button" data-role="Mid" onclick="filterByRole('Mid')">MID</button>
+        <button class="role-button" data-role="Adc" onclick="filterByRole('Adc')">ADC</button>
+        <button class="role-button" data-role="Support" onclick="filterByRole('Support')">SUP</button>
+      </div>
+      <div class="champion-pool" id="champion-pool"></div>
+    </div>
+
+    <div class="team" id="red-team">
+      <h2>Red Team</h2>
+      <div class="bans" id="red-bans"></div>
+      <div class="picks" id="red-picks"></div>
+    </div>
+  </div>
+
+  <dialog id="protectModal" class="modal">
+    <div class="modal-content">
+      <h2>プロテクトを設定</h2>
+      <input type="number" id="protectSlotsInput" min="0" value="3">
+      <div class="modal-actions">
+        <button onclick="setProtectSlots()">設定</button>
+        <button onclick="document.getElementById('protectModal').close()">キャンセル</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="fearlessBanModal" class="modal">
+    <div class="modal-content">
+      <h2>フィアレスバンを設定</h2>
+      <input type="number" id="fearlessBanSlotsInput" min="0" value="5">
+      <div class="modal-actions">
+        <button onclick="setFearlessBanSlots()">設定</button>
+        <button onclick="document.getElementById('fearlessBanModal').close()">キャンセル</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
