@@ -122,6 +122,7 @@ function initializePickSlots() {
     bluePicks.appendChild(createPickDisplay('blue'));
     redPicks.appendChild(createPickDisplay('red'));
   }
+  setupPickSlotsReordering();
 }
 
 function initializeBanSlots() {
@@ -156,6 +157,8 @@ function initializeFearlessBanSlots(count) {
 function createPickDisplay(team) {
   const pickDisplay = document.createElement('div');
   pickDisplay.classList.add('pick-display');
+  pickDisplay.draggable = true;
+  pickDisplay.dataset.team = team;
 
   const slot = createEmptySlot('pick', team);
   pickDisplay.appendChild(slot);
@@ -633,6 +636,64 @@ searchInput.addEventListener('input', () => {
 });
 
 teamToggleButton.addEventListener('change', updateTeamToggleButtonState);
+
+let draggedPickDisplay = null;
+
+function setupPickSlotsReordering() {
+  const setupDragAndDrop = (picksContainer) => {
+    const pickDisplays = picksContainer.children;
+    
+    for (let i = 0; i < pickDisplays.length; i++) {
+      const pickDisplay = pickDisplays[i];
+      
+      pickDisplay.addEventListener('dragstart', (e) => {
+        const slot = pickDisplay.querySelector('.slot');
+        if (slot && slot.childElementCount > 0) {
+          draggedPickDisplay = pickDisplay;
+          e.dataTransfer.effectAllowed = 'move';
+          pickDisplay.classList.add('dragging');
+        } else {
+          e.preventDefault();
+        }
+      });
+      
+      pickDisplay.addEventListener('dragend', () => {
+        pickDisplay.classList.remove('dragging');
+        draggedPickDisplay = null;
+      });
+      
+      pickDisplay.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (!draggedPickDisplay || draggedPickDisplay === pickDisplay) return;
+        
+        const afterElement = getDragAfterElement(picksContainer, e.clientY);
+        if (afterElement === null) {
+          picksContainer.appendChild(draggedPickDisplay);
+        } else {
+          picksContainer.insertBefore(draggedPickDisplay, afterElement);
+        }
+      });
+    }
+  };
+  
+  setupDragAndDrop(bluePicks);
+  setupDragAndDrop(redPicks);
+}
+
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll('.pick-display:not(.dragging)')];
+  
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   updateTeamToggleButtonState();
