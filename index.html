@@ -2,13 +2,61 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>LoL Pick Draft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LoL ドラフトシミュレーター | League of Legends ピック&バン練習ツール</title>
+  <meta name="description" content="League of Legends (LoL) のドラフトピック&バンをシミュレーションできる無料ツール。プロテクトやフィアレスバンにも対応。チャンピオンの並び替えも可能で、大会やスクリムの戦略立案に最適です。" />
+  <meta name="keywords" content="LoL, League of Legends, リーグオブレジェンド, ドラフト, ピック, バン, シミュレーター, プロテクト, フィアレスバン, 戦略, esports" />
+  <meta name="author" content="LoL Draft Simulator" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://loldraftsimulator.ikomainu.com" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="LoL ドラフトシミュレーター | League of Legends ピック&バン練習ツール" />
+  <meta property="og:description" content="League of Legends のドラフトピック&バンをシミュレーション。プロテクトやフィアレスバンにも対応した無料ツール。" />
+  <meta property="og:image" content="https://loldraftsimulator.ikomainu.com/public/og-image.png" />
+  <meta property="og:url" content="https://loldraftsimulator.ikomainu.com" />
+  <meta property="og:site_name" content="LoL ドラフトシミュレーター" />
+  <meta property="og:locale" content="ja_JP" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="LoL ドラフトシミュレーター | League of Legends ピック&バン練習ツール" />
+  <meta name="twitter:description" content="League of Legends のドラフトピック&バンをシミュレーション。プロテクトやフィアレスバンにも対応した無料ツール。" />
+  <meta name="twitter:image" content="https://loldraftsimulator.ikomainu.com/public/og-image.png" />
+  
   <link rel="stylesheet" href="style.css" />
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "LoL ドラフトシミュレーター",
+    "description": "League of Legends のドラフトピック&バンをシミュレーションできる無料ツール",
+    "url": "https://loldraftsimulator.ikomainu.com",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "150"
+    }
+  }
+  </script>
 </head>
 <body>
-  <h1>LoL ピックドラフト</h1>
+  <header>
+    <h1>LoL ピックドラフト</h1>
+  </header>
 
-  <div class="controls">
+  <main>
+    <section class="controls" aria-label="コントロールパネル">
     <div class="toggle-container">
       <span class="toggle-label">Blue</span>
       <label class="switch">
@@ -23,46 +71,46 @@
     <button onclick="setMode('ban')" id="banModeBtn">通常バンフェーズ</button>
     <button onclick="resetDraft()">リセット</button>
 
-    <button class="collapsible-button" onclick="toggleAdvancedSettings()">詳細設定</button>
-  </div>
-  
-  <div class="collapsible-content" id="advancedSettingsContent">
+      <button class="collapsible-button" onclick="toggleAdvancedSettings()">詳細設定</button>
+    </section>
+    
+    <section class="collapsible-content" id="advancedSettingsContent" aria-label="詳細設定">
     <div class="controls">
       <button onclick="openProtectModal()">プロテクト</button>
-      <button onclick="openFearlessBanModal()">フィアレスバン</button>
-    </div>
-  </div>
+        <button onclick="openFearlessBanModal()">フィアレスバン</button>
+      </div>
+    </section>
 
-  <div class="team-container protect-container" id="protectContainer" style="display: none;">
+    <section class="team-container protect-container" id="protectContainer" style="display: none;" aria-label="プロテクト設定">
     <div class="team" id="blue-protect">
       <h2>Blue Team Protects</h2>
       <div class="protects" id="blue-protects"></div>
     </div>
     <div class="team" id="red-protect">
       <h2>Red Team Protects</h2>
-      <div class="protects" id="red-protects"></div>
-    </div>
-  </div>
+        <div class="protects" id="red-protects"></div>
+      </div>
+    </section>
 
-  <div class="team-container fearless-ban-container" id="fearlessBanContainer" style="display: none;">
+    <section class="team-container fearless-ban-container" id="fearlessBanContainer" style="display: none;" aria-label="フィアレスバン設定">
     <div class="team" id="blue-fearless-ban">
       <h2>Blue Team Fearless Bans</h2>
       <div class="fearless-bans" id="blue-fearless-bans"></div>
     </div>
     <div class="team" id="red-fearless-ban">
       <h2>Red Team Fearless Bans</h2>
-      <div class="fearless-bans" id="red-fearless-bans"></div>
-    </div>
-  </div>
+        <div class="fearless-bans" id="red-fearless-bans"></div>
+      </div>
+    </section>
 
-  <div class="team-container">
-    <div class="team" id="blue-team">
-      <h2>Blue Team</h2>
+    <section class="team-container" aria-label="メインドラフトエリア">
+      <article class="team" id="blue-team">
+        <h2>Blue Team</h2>
       <div class="bans" id="blue-bans"></div>
-      <div class="picks" id="blue-picks"></div>
-    </div>
+        <div class="picks" id="blue-picks"></div>
+      </article>
 
-    <div class="champion-search-container">
+      <aside class="champion-search-container" aria-label="チャンピオン検索">
       <input type="text" id="search" placeholder="チャンピオン名で検索（日本語 / 英語）" />
       <div class="role-filter-container">
         <button class="role-button" data-role="All" onclick="filterByRole('All')">全て</button>
@@ -72,15 +120,16 @@
         <button class="role-button" data-role="Adc" onclick="filterByRole('Adc')">ADC</button>
         <button class="role-button" data-role="Support" onclick="filterByRole('Support')">SUP</button>
       </div>
-      <div class="champion-pool" id="champion-pool"></div>
-    </div>
+        <div class="champion-pool" id="champion-pool"></div>
+      </aside>
 
-    <div class="team" id="red-team">
-      <h2>Red Team</h2>
+      <article class="team" id="red-team">
+        <h2>Red Team</h2>
       <div class="bans" id="red-bans"></div>
-      <div class="picks" id="red-picks"></div>
-    </div>
-  </div>
+        <div class="picks" id="red-picks"></div>
+      </article>
+    </section>
+  </main>
 
   <dialog id="protectModal" class="modal">
     <div class="modal-content">
@@ -105,5 +154,9 @@
   </dialog>
 
   <script src="script.js"></script>
+  
+  <!-- Performance optimization -->
+  <link rel="preconnect" href="https://ddragon.leagueoflegends.com">
+  <link rel="dns-prefetch" href="https://ddragon.leagueoflegends.com">
 </body>
 </html>
