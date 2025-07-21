@@ -76,29 +76,49 @@
     
     <section class="collapsible-content" id="advancedSettingsContent" aria-label="詳細設定">
     <div class="controls">
-      <button onclick="openProtectModal()">プロテクト</button>
-        <button onclick="openFearlessBanModal()">フィアレスバン</button>
+      <button onclick="toggleProtectSection()" id="protectToggleBtn">プロテクトを表示</button>
+      <button onclick="toggleFearlessBanSection()" id="fearlessToggleBtn">フィアレスバンを表示</button>
       </div>
     </section>
 
     <section class="team-container protect-container" id="protectContainer" style="display: none;" aria-label="プロテクト設定">
     <div class="team" id="blue-protect">
-      <h2>Blue Team Protects</h2>
+      <div class="team-header">
+        <h2>Blue Team Protects</h2>
+        <div class="slot-controls">
+          <button class="slot-control-btn" onclick="changeProtectSlots(-1)">－</button>
+          <span class="slot-count" id="protect-count-display" onclick="showProtectInput()">5</span>
+          <input type="number" class="slot-count-input" id="protect-count" value="5" min="0" max="20" style="display: none;" onchange="updateProtectSlots()" onblur="hideProtectInput()">
+          <button class="slot-control-btn" onclick="changeProtectSlots(1)">＋</button>
+        </div>
+      </div>
       <div class="protects" id="blue-protects"></div>
     </div>
     <div class="team" id="red-protect">
-      <h2>Red Team Protects</h2>
+      <div class="team-header">
+        <h2>Red Team Protects</h2>
+      </div>
         <div class="protects" id="red-protects"></div>
       </div>
     </section>
 
     <section class="team-container fearless-ban-container" id="fearlessBanContainer" style="display: none;" aria-label="フィアレスバン設定">
     <div class="team" id="blue-fearless-ban">
-      <h2>Blue Team Fearless Bans</h2>
+      <div class="team-header">
+        <h2>Blue Team Fearless Bans</h2>
+        <div class="slot-controls">
+          <button class="slot-control-btn" onclick="changeFearlessBanSlots(-1)">－</button>
+          <span class="slot-count" id="fearless-count-display" onclick="showFearlessInput()">5</span>
+          <input type="number" class="slot-count-input" id="fearless-count" value="5" min="0" max="20" style="display: none;" onchange="updateFearlessBanSlots()" onblur="hideFearlessInput()">
+          <button class="slot-control-btn" onclick="changeFearlessBanSlots(1)">＋</button>
+        </div>
+      </div>
       <div class="fearless-bans" id="blue-fearless-bans"></div>
     </div>
     <div class="team" id="red-fearless-ban">
-      <h2>Red Team Fearless Bans</h2>
+      <div class="team-header">
+        <h2>Red Team Fearless Bans</h2>
+      </div>
         <div class="fearless-bans" id="red-fearless-bans"></div>
       </div>
     </section>
@@ -131,27 +151,6 @@
     </section>
   </main>
 
-  <dialog id="protectModal" class="modal">
-    <div class="modal-content">
-      <h2>プロテクトを設定</h2>
-      <input type="number" id="protectSlotsInput" min="0" value="3">
-      <div class="modal-actions">
-        <button onclick="setProtectSlots()">設定</button>
-        <button onclick="document.getElementById('protectModal').close()">キャンセル</button>
-      </div>
-    </div>
-  </dialog>
-
-  <dialog id="fearlessBanModal" class="modal">
-    <div class="modal-content">
-      <h2>フィアレスバンを設定</h2>
-      <input type="number" id="fearlessBanSlotsInput" min="0" value="5">
-      <div class="modal-actions">
-        <button onclick="setFearlessBanSlots()">設定</button>
-        <button onclick="document.getElementById('fearlessBanModal').close()">キャンセル</button>
-      </div>
-    </div>
-  </dialog>
 
   <script src="script.js"></script>
   

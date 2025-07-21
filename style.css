@@ -465,9 +465,8 @@ input:checked + .slider .right-label {
 }
 
 .protects, .fearless-bans {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 64px);
   gap: 12px;
   margin: 10px 0;
   min-height: 80px;
@@ -903,6 +902,9 @@ input:checked + .slider .right-label {
   .role-filter-container {
     margin-top: 10px;
   }
+  .protects, .fearless-bans {
+    grid-template-columns: repeat(4, 64px);
+  }
 }
 
 /* Hextech-style decoration */
@@ -1044,6 +1046,118 @@ input:checked + .slider .right-label {
   }
 }
 
+/* Team header with slot controls */
+.team-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.team-header h2 {
+  margin: 0;
+}
+
+.slot-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slot-control-btn {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--lol-gold);
+  background: linear-gradient(135deg, #1e2328 0%, #0c1f2e 100%);
+  color: var(--lol-gold-light);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.slot-control-btn:hover {
+  background: linear-gradient(135deg, var(--lol-gold) 0%, #A88A59 100%);
+  color: #0A0E1A;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.6);
+}
+
+.slot-count {
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--lol-gold);
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--lol-border);
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.slot-count:hover {
+  border-color: var(--lol-gold);
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.3);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.slot-count-input {
+  width: 50px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--lol-gold);
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--lol-gold);
+  border-radius: 5px;
+  text-align: center;
+  padding: 0;
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.5);
+  font-family: inherit;
+}
+
+.slot-count-input:focus {
+  outline: none;
+  border-color: var(--lol-gold);
+  box-shadow: 0 0 10px rgba(200, 155, 60, 0.5);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Hide number input spin buttons */
+.slot-count-input::-webkit-inner-spin-button,
+.slot-count-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.slot-count-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Advanced info styling */
+.advanced-info {
+  text-align: center;
+  padding: 10px;
+}
+
+.advanced-info p {
+  margin: 0;
+  color: var(--lol-text-light);
+  font-size: 14px;
+  font-style: italic;
+}
+
 /* Page load animation */
 @keyframes fadeIn {
   from {
@@ -1120,5 +1234,13 @@ h1, .controls, .team-container, .champion-search-container {
   .role-button {
     font-size: 12px;
     padding: 6px 10px;
+  }
+  .protects, .fearless-bans {
+    grid-template-columns: repeat(3, 56px);
+    gap: 8px;
+  }
+  .protects .slot, .fearless-bans .slot {
+    width: 56px;
+    height: 56px;
   }
 }

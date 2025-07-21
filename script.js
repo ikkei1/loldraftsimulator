@@ -17,10 +17,12 @@ const protectContainer = document.getElementById('protectContainer');
 const fearlessBanContainer = document.getElementById('fearlessBanContainer');
 const advancedSettingsContent = document.getElementById('advancedSettingsContent');
 
-const protectModal = document.getElementById('protectModal');
-const protectSlotsInput = document.getElementById('protectSlotsInput');
-const fearlessBanModal = document.getElementById('fearlessBanModal');
-const fearlessBanSlotsInput = document.getElementById('fearlessBanSlotsInput');
+const protectCountInput = document.getElementById('protect-count');
+const fearlessCountInput = document.getElementById('fearless-count');
+const protectCountDisplay = document.getElementById('protect-count-display');
+const fearlessCountDisplay = document.getElementById('fearless-count-display');
+const protectToggleBtn = document.getElementById('protectToggleBtn');
+const fearlessToggleBtn = document.getElementById('fearlessToggleBtn');
 
 
 let selectedChampions = new Set();
@@ -37,8 +39,11 @@ let currentRoleFilter = 'All'; // New: Default role filter
 
 let MAX_PICKS = 5;
 let MAX_BANS = 5;
-let MAX_PROTECTS = 0; // Default to 0, set by modal
-let MAX_FEARLESS_BANS = 0; // Default to 0, set by modal
+let MAX_PROTECTS = 5; // Default to 5
+let MAX_FEARLESS_BANS = 5; // Default to 5
+
+let protectSectionVisible = false;
+let fearlessBanSectionVisible = false;
 
 let draggedChampId = null;
 let draggedFromSlot = null;
@@ -110,8 +115,13 @@ async function fetchChampions() {
 function initializeAllSlots() {
   initializePickSlots();
   initializeBanSlots();
-  initializeProtectSlots(MAX_PROTECTS);
-  initializeFearlessBanSlots(MAX_FEARLESS_BANS);
+  // Only initialize protect/fearless slots if they are visible
+  if (protectSectionVisible) {
+    initializeProtectSlots(MAX_PROTECTS);
+  }
+  if (fearlessBanSectionVisible) {
+    initializeFearlessBanSlots(MAX_FEARLESS_BANS);
+  }
   setMode(currentMode);
   updateTeamToggleButtonState();
 }
@@ -142,7 +152,9 @@ function initializeProtectSlots(count) {
     blueProtects.appendChild(createEmptyProtectSlot('blue'));
     redProtects.appendChild(createEmptyProtectSlot('red'));
   }
-  protectContainer.style.display = count > 0 ? 'flex' : 'none';
+  if (protectSectionVisible) {
+    protectContainer.style.display = 'flex';
+  }
 }
 
 function initializeFearlessBanSlots(count) {
@@ -152,7 +164,9 @@ function initializeFearlessBanSlots(count) {
     blueFearlessBans.appendChild(createEmptyFearlessBanSlot('blue'));
     redFearlessBans.appendChild(createEmptyFearlessBanSlot('red'));
   }
-  fearlessBanContainer.style.display = count > 0 ? 'flex' : 'none';
+  if (fearlessBanSectionVisible) {
+    fearlessBanContainer.style.display = 'flex';
+  }
 }
 
 function createPickDisplay(team) {
@@ -652,11 +666,25 @@ function resetDraft() {
   protectedChampions.clear();
   fearlessBannedChampions.clear();
 
-  // Reset MAX_PROTECTS and MAX_FEARLESS_BANS to 0 before re-initializing
-  MAX_PROTECTS = 0;
-  MAX_FEARLESS_BANS = 0;
+  // Reset MAX_PROTECTS and MAX_FEARLESS_BANS to default before re-initializing
+  MAX_PROTECTS = 5;
+  MAX_FEARLESS_BANS = 5;
+  
+  // Reset visibility states
+  protectSectionVisible = false;
+  fearlessBanSectionVisible = false;
+  protectContainer.style.display = 'none';
+  fearlessBanContainer.style.display = 'none';
+  if (protectToggleBtn) {
+    protectToggleBtn.textContent = 'プロテクトを表示';
+    protectToggleBtn.classList.remove('active');
+  }
+  if (fearlessToggleBtn) {
+    fearlessToggleBtn.textContent = 'フィアレスバンを表示';
+    fearlessToggleBtn.classList.remove('active');
+  }
 
-  initializeAllSlots(); // This will re-render with 0 protect/fearless ban slots
+  initializeAllSlots(); // This will re-render with default slots
   setMode('pick');
   currentTeam = 'blue';
   teamToggleButton.checked = false;
@@ -688,39 +716,110 @@ function toggleAdvancedSettings() {
   advancedSettingsContent.classList.toggle('show');
 }
 
-// Modal Functions
-function openProtectModal() {
-  protectSlotsInput.value = MAX_PROTECTS;
-  protectModal.showModal();
-}
-
-function setProtectSlots() {
-  const count = parseInt(protectSlotsInput.value);
-  if (isNaN(count) || count < 0) {
-    alert('有効な数字を入力してください。');
-    return;
+// Toggle section visibility
+function toggleProtectSection() {
+  protectSectionVisible = !protectSectionVisible;
+  protectContainer.style.display = protectSectionVisible ? 'flex' : 'none';
+  if (protectToggleBtn) {
+    protectToggleBtn.textContent = protectSectionVisible ? 'プロテクトを非表示' : 'プロテクトを表示';
+    protectToggleBtn.classList.toggle('active', protectSectionVisible);
   }
-  MAX_PROTECTS = count;
-  initializeProtectSlots(MAX_PROTECTS);
-  protectModal.close();
-  renderChampionPool(searchInput.value);
-}
-
-function openFearlessBanModal() {
-  fearlessBanSlotsInput.value = MAX_FEARLESS_BANS;
-  fearlessBanModal.showModal();
-}
-
-function setFearlessBanSlots() {
-  const count = parseInt(fearlessBanSlotsInput.value);
-  if (isNaN(count) || count < 0) {
-    alert('有効な数字を入力してください。');
-    return;
+  if (protectSectionVisible) {
+    initializeProtectSlots(MAX_PROTECTS);
   }
-  MAX_FEARLESS_BANS = count;
-  initializeFearlessBanSlots(MAX_FEARLESS_BANS);
-  fearlessBanModal.close();
-  renderChampionPool(searchInput.value);
+}
+
+function toggleFearlessBanSection() {
+  fearlessBanSectionVisible = !fearlessBanSectionVisible;
+  fearlessBanContainer.style.display = fearlessBanSectionVisible ? 'flex' : 'none';
+  if (fearlessToggleBtn) {
+    fearlessToggleBtn.textContent = fearlessBanSectionVisible ? 'フィアレスバンを非表示' : 'フィアレスバンを表示';
+    fearlessToggleBtn.classList.toggle('active', fearlessBanSectionVisible);
+  }
+  if (fearlessBanSectionVisible) {
+    initializeFearlessBanSlots(MAX_FEARLESS_BANS);
+  }
+}
+
+// Slot control functions
+function changeProtectSlots(delta) {
+  const newCount = MAX_PROTECTS + delta;
+  if (newCount >= 0 && newCount <= 20) {
+    MAX_PROTECTS = newCount;
+    initializeProtectSlots(MAX_PROTECTS);
+    if (protectCountInput) protectCountInput.value = MAX_PROTECTS;
+    if (protectCountDisplay) protectCountDisplay.textContent = MAX_PROTECTS;
+    renderChampionPool(searchInput.value);
+  }
+}
+
+function changeFearlessBanSlots(delta) {
+  const newCount = MAX_FEARLESS_BANS + delta;
+  if (newCount >= 0 && newCount <= 20) {
+    MAX_FEARLESS_BANS = newCount;
+    initializeFearlessBanSlots(MAX_FEARLESS_BANS);
+    if (fearlessCountInput) fearlessCountInput.value = MAX_FEARLESS_BANS;
+    if (fearlessCountDisplay) fearlessCountDisplay.textContent = MAX_FEARLESS_BANS;
+    renderChampionPool(searchInput.value);
+  }
+}
+
+// Manual input update functions
+function updateProtectSlots() {
+  const newCount = parseInt(protectCountInput.value) || 0;
+  if (newCount >= 0 && newCount <= 20) {
+    MAX_PROTECTS = newCount;
+    initializeProtectSlots(MAX_PROTECTS);
+    if (protectCountDisplay) protectCountDisplay.textContent = MAX_PROTECTS;
+    renderChampionPool(searchInput.value);
+  } else {
+    protectCountInput.value = MAX_PROTECTS; // Reset to current value if invalid
+  }
+}
+
+function updateFearlessBanSlots() {
+  const newCount = parseInt(fearlessCountInput.value) || 0;
+  if (newCount >= 0 && newCount <= 20) {
+    MAX_FEARLESS_BANS = newCount;
+    initializeFearlessBanSlots(MAX_FEARLESS_BANS);
+    if (fearlessCountDisplay) fearlessCountDisplay.textContent = MAX_FEARLESS_BANS;
+    renderChampionPool(searchInput.value);
+  } else {
+    fearlessCountInput.value = MAX_FEARLESS_BANS; // Reset to current value if invalid
+  }
+}
+
+// Show/hide input functions
+function showProtectInput() {
+  if (protectCountDisplay && protectCountInput) {
+    protectCountDisplay.style.display = 'none';
+    protectCountInput.style.display = 'block';
+    protectCountInput.focus();
+    protectCountInput.select();
+  }
+}
+
+function hideProtectInput() {
+  if (protectCountDisplay && protectCountInput) {
+    protectCountDisplay.style.display = 'inline-block';
+    protectCountInput.style.display = 'none';
+  }
+}
+
+function showFearlessInput() {
+  if (fearlessCountDisplay && fearlessCountInput) {
+    fearlessCountDisplay.style.display = 'none';
+    fearlessCountInput.style.display = 'block';
+    fearlessCountInput.focus();
+    fearlessCountInput.select();
+  }
+}
+
+function hideFearlessInput() {
+  if (fearlessCountDisplay && fearlessCountInput) {
+    fearlessCountDisplay.style.display = 'inline-block';
+    fearlessCountInput.style.display = 'none';
+  }
 }
 
 
