@@ -412,6 +412,18 @@ input:checked + .slider .right-label {
   gap: 15px;
   width: 100%;
   justify-content: center;
+  cursor: move;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.pick-display.dragging {
+  opacity: 0.5;
+}
+
+.pick-display:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .splash-art {
