@@ -60,8 +60,7 @@
       <span class="toggle-label">Blue</span>
       <label class="switch">
         <input type="checkbox" id="teamToggleButton">
-        <span class="slider round">
-        </span>
+        <span class="slider round"></span>
       </label>
       <span class="toggle-label">Red</span>
     </div>
@@ -70,66 +69,47 @@
     <button onclick="setMode('ban')" id="banModeBtn">通常バンフェーズ</button>
     <button onclick="resetDraft()">リセット</button>
 
-      <button class="collapsible-button" onclick="toggleAdvancedSettings()">詳細設定</button>
-    </section>
-    
-    <section class="collapsible-content" id="advancedSettingsContent" aria-label="詳細設定">
+    <button class="collapsible-button" onclick="toggleAdvancedSettings()">詳細設定</button>
+  </section>
+  
+  <!-- 詳細設定のプロテクト・フィアレスバンのカウンターをプラスマイナス式に -->
+  <section class="collapsible-content" id="advancedSettingsContent" aria-label="詳細設定">
     <div class="controls">
       <button onclick="toggleProtectSection()" id="protectToggleBtn">プロテクトを表示</button>
+      <button class="slot-control-btn" onclick="changeProtectSlots(-1)">－</button>
+      <span class="slot-count" id="protect-count-display" onclick="showProtectInput()">5</span>
+      <input type="number" class="slot-count-input" id="protect-count" value="5" min="0" max="20" style="display: none;" onchange="updateProtectSlots()" onblur="hideProtectInput()">
+      <button class="slot-control-btn" onclick="changeProtectSlots(1)">＋</button>
+
       <button onclick="toggleFearlessBanSection()" id="fearlessToggleBtn">フィアレスバンを表示</button>
-      </div>
-    </section>
-
-    <section class="team-container protect-container" id="protectContainer" style="display: none;" aria-label="プロテクト設定">
-    <div class="team" id="blue-protect">
-      <div class="team-header">
-        <!-- <h2>Blue Team Protects</h2> -->
-        <div class="slot-controls">
-          <button class="slot-control-btn" onclick="changeProtectSlots(-1)">－</button>
-          <span class="slot-count" id="protect-count-display" onclick="showProtectInput()">5</span>
-          <input type="number" class="slot-count-input" id="protect-count" value="5" min="0" max="20" style="display: none;" onchange="updateProtectSlots()" onblur="hideProtectInput()">
-          <button class="slot-control-btn" onclick="changeProtectSlots(1)">＋</button>
-        </div>
-      </div>
-      <div class="protects" id="blue-protects"></div>
+      <button class="slot-control-btn" onclick="changeFearlessBanSlots(-1)">－</button>
+      <span class="slot-count" id="fearless-count-display" onclick="showFearlessInput()">5</span>
+      <input type="number" class="slot-count-input" id="fearless-count" value="5" min="0" max="20" style="display: none;" onchange="updateFearlessBanSlots()" onblur="hideFearlessInput()">
+      <button class="slot-control-btn" onclick="changeFearlessBanSlots(1)">＋</button>
     </div>
-    <div class="team" id="red-protect">
-      <div class="team-header">
-        <!-- <h2>Red Team Protects</h2> -->
-      </div>
-        <div class="protects" id="red-protects"></div>
-      </div>
-    </section>
+  </section>
 
-    <section class="team-container fearless-ban-container" id="fearlessBanContainer" style="display: none;" aria-label="フィアレスバン設定">
-    <div class="team" id="blue-fearless-ban">
-      <div class="team-header">
-        <!-- <h2>Blue Team Fearless Bans</h2> -->
-        <div class="slot-controls">
-          <button class="slot-control-btn" onclick="changeFearlessBanSlots(-1)">－</button>
-          <span class="slot-count" id="fearless-count-display" onclick="showFearlessInput()">5</span>
-          <input type="number" class="slot-count-input" id="fearless-count" value="5" min="0" max="20" style="display: none;" onchange="updateFearlessBanSlots()" onblur="hideFearlessInput()">
-          <button class="slot-control-btn" onclick="changeFearlessBanSlots(1)">＋</button>
-        </div>
+  <section class="team-container" aria-label="メインドラフトエリア">
+    <article class="team" id="blue-team">
+      <!-- プロテクト枠 -->
+      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
       </div>
-      <div class="fearless-bans" id="blue-fearless-bans"></div>
-    </div>
-    <div class="team" id="red-fearless-ban">
-      <div class="team-header">
-        <!-- <h2>Red Team Fearless Bans</h2> -->
-      </div>
-        <div class="fearless-bans" id="red-fearless-bans"></div>
-      </div>
-    </section>
+      <section class="protect-container" id="protectContainer" style="display: none;" aria-label="プロテクト設定">
+        <div class="protects" id="blue-protects"></div>
+      </section>
 
-    <section class="team-container" aria-label="メインドラフトエリア">
-      <article class="team" id="blue-team">
-        <!-- <h2>Blue Team</h2> -->
+      <!-- フィアレスバン枠 -->
+      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+      </div>
+      <section class="fearless-ban-container" id="fearlessBanContainer" style="display: none;" aria-label="フィアレスバン設定">
+        <div class="fearless-bans" id="blue-fearless-bans"></div>
+      </section>
+
       <div class="bans" id="blue-bans"></div>
-        <div class="picks" id="blue-picks"></div>
-      </article>
+      <div class="picks" id="blue-picks"></div>
+    </article>
 
-      <aside class="champion-search-container" aria-label="チャンピオン検索">
+    <aside class="champion-search-container" aria-label="チャンピオン検索">
       <input type="text" id="search" placeholder="チャンピオン名で検索（日本語 / 英語）" />
       <div class="role-filter-container">
         <button class="role-button" data-role="All" onclick="filterByRole('All')">全て</button>
@@ -139,16 +119,30 @@
         <button class="role-button" data-role="Adc" onclick="filterByRole('Adc')">ADC</button>
         <button class="role-button" data-role="Support" onclick="filterByRole('Support')">SUP</button>
       </div>
-        <div class="champion-pool" id="champion-pool"></div>
-      </aside>
+      <div class="champion-pool" id="champion-pool"></div>
+    </aside>
 
-      <article class="team" id="red-team">
-        <!-- <h2>Red Team</h2> -->
+    <article class="team" id="red-team">
+      <!-- プロテクト枠 -->
+      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+      </div>
+      <section class="protect-container" id="protectContainerRed" style="display: none;" aria-label="プロテクト設定">
+        <div class="protects" id="red-protects"></div>
+      </section>
+
+      <!-- フィアレスバン枠 -->
+      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+        <input type="number" class="slot-count-input" id="fearless-count-red" value="5" min="0" max="20" style="display: none; width:40px;" onchange="updateFearlessBanSlots('red')" onblur="hideFearlessInput('red')">
+      </div>
+      <section class="fearless-ban-container" id="fearlessBanContainerRed" style="display: none;" aria-label="フィアレスバン設定">
+        <div class="fearless-bans" id="red-fearless-bans"></div>
+      </section>
+
       <div class="bans" id="red-bans"></div>
-        <div class="picks" id="red-picks"></div>
-      </article>
-    </section>
-  </main>
+      <div class="picks" id="red-picks"></div>
+    </article>
+  </section>
+</main>
 
 
   <script src="script.js"></script>

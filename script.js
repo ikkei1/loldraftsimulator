@@ -442,40 +442,36 @@ function pickChampion(id, name, targetSlot = null) {
 
   if (!slotToUse) {
     const targetPicks = currentTeam === 'blue' ? bluePicks : redPicks;
-    const emptyPickDisplays = [...targetPicks.children].filter(pd => pd.querySelector('.slot').childElementCount === 0);
-
+    const emptyPickDisplays = [...targetPicks.children].filter(pd => {
+      const splashArt = pd.querySelector('.splash-art');
+      return !splashArt.dataset.champId || splashArt.style.display === 'none';
+    });
     if (emptyPickDisplays.length > 0) {
       slotToUse = emptyPickDisplays[0].querySelector('.slot');
     } else {
-        return false;
+      return false;
     }
   }
 
-  if (slotToUse.childElementCount > 0) {
-      return false;
+  let pickDisplayParent = slotToUse.closest('.pick-display');
+  if (!pickDisplayParent) return false;
+  const splashArt = pickDisplayParent.querySelector('.splash-art');
+  if (!splashArt) return false;
+
+  // 既存のスプラッシュアートを解除（入れ替え対応）
+  if (splashArt.dataset.champId && splashArt.style.display !== 'none') {
+    selectedChampions.delete(splashArt.dataset.champId);
   }
 
   selectedChampions.add(id);
+  splashArt.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${id}_0.jpg`;
+  splashArt.style.display = 'block';
+  splashArt.dataset.champId = id;
 
-  const champImg = document.createElement('img');
-  champImg.src = `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${id}.png`;
-  champImg.title = name;
-  champImg.width = 64;
-  champImg.height = 64;
-  champImg.dataset.id = id;
-  champImg.draggable = true;
-  // Reset any inline styles that might have been applied
-  champImg.style.filter = '';
-  champImg.style.opacity = '';
+  // 枠を消す（has-splashクラス追加）
+  pickDisplayParent.classList.add('has-splash');
+  slotToUse.innerHTML = '';
 
-  slotToUse.appendChild(champImg);
-
-  let pickDisplayParent = slotToUse.closest('.pick-display');
-  if (pickDisplayParent) {
-    const splashArt = pickDisplayParent.querySelector('.splash-art');
-    splashArt.src = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${id}_0.jpg`;
-    splashArt.style.display = 'block';
-  }
   renderChampionPool(searchInput.value);
   return true;
 }
@@ -485,14 +481,16 @@ function unpickChampion(id) {
 
   const allPickDisplays = [...bluePicks.children, ...redPicks.children];
   allPickDisplays.forEach(pickDisplay => {
-    const slot = pickDisplay.querySelector('.slot');
-    const champImg = slot.querySelector(`img[data-id="${id}"]`);
-    if (champImg) {
-      slot.removeChild(champImg);
-      const splashArt = pickDisplay.querySelector('.splash-art');
+    const splashArt = pickDisplay.querySelector('.splash-art');
+    if (splashArt && splashArt.dataset.champId === id) {
       splashArt.src = '';
       splashArt.style.display = 'none';
+      splashArt.dataset.champId = '';
+      // 枠を再表示（has-splashクラス削除）
+      pickDisplay.classList.remove('has-splash');
     }
+    const slot = pickDisplay.querySelector('.slot');
+    if (slot) slot.innerHTML = '';
   });
 
   renderChampionPool(searchInput.value);
@@ -719,7 +717,9 @@ function toggleAdvancedSettings() {
 // Toggle section visibility
 function toggleProtectSection() {
   protectSectionVisible = !protectSectionVisible;
-  protectContainer.style.display = protectSectionVisible ? 'flex' : 'none';
+  // 両チームのプロテクト枠を同時に表示/非表示
+  document.getElementById('protectContainer').style.display = protectSectionVisible ? 'flex' : 'none';
+  document.getElementById('protectContainerRed').style.display = protectSectionVisible ? 'flex' : 'none';
   if (protectToggleBtn) {
     protectToggleBtn.textContent = protectSectionVisible ? 'プロテクトを非表示' : 'プロテクトを表示';
     protectToggleBtn.classList.toggle('active', protectSectionVisible);
@@ -731,7 +731,9 @@ function toggleProtectSection() {
 
 function toggleFearlessBanSection() {
   fearlessBanSectionVisible = !fearlessBanSectionVisible;
-  fearlessBanContainer.style.display = fearlessBanSectionVisible ? 'flex' : 'none';
+  // 両チームのフィアレスバン枠を同時に表示/非表示
+  document.getElementById('fearlessBanContainer').style.display = fearlessBanSectionVisible ? 'flex' : 'none';
+  document.getElementById('fearlessBanContainerRed').style.display = fearlessBanSectionVisible ? 'flex' : 'none';
   if (fearlessToggleBtn) {
     fearlessToggleBtn.textContent = fearlessBanSectionVisible ? 'フィアレスバンを非表示' : 'フィアレスバンを表示';
     fearlessToggleBtn.classList.toggle('active', fearlessBanSectionVisible);
@@ -741,28 +743,7 @@ function toggleFearlessBanSection() {
   }
 }
 
-// Slot control functions
-function changeProtectSlots(delta) {
-  const newCount = MAX_PROTECTS + delta;
-  if (newCount >= 0 && newCount <= 20) {
-    MAX_PROTECTS = newCount;
-    initializeProtectSlots(MAX_PROTECTS);
-    if (protectCountInput) protectCountInput.value = MAX_PROTECTS;
-    if (protectCountDisplay) protectCountDisplay.textContent = MAX_PROTECTS;
-    renderChampionPool(searchInput.value);
-  }
-}
-
-function changeFearlessBanSlots(delta) {
-  const newCount = MAX_FEARLESS_BANS + delta;
-  if (newCount >= 0 && newCount <= 20) {
-    MAX_FEARLESS_BANS = newCount;
-    initializeFearlessBanSlots(MAX_FEARLESS_BANS);
-    if (fearlessCountInput) fearlessCountInput.value = MAX_FEARLESS_BANS;
-    if (fearlessCountDisplay) fearlessCountDisplay.textContent = MAX_FEARLESS_BANS;
-    renderChampionPool(searchInput.value);
-  }
-}
+// プラス・マイナスでカウンターを動かす関数は既存のchangeProtectSlots, changeFearlessBanSlotsでOK
 
 // Manual input update functions
 function updateProtectSlots() {
